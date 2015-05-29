@@ -1,0 +1,32 @@
+# Magento environment build
+data:
+    build: data/
+    volumes:
+        - data/srv/magento:/srv/magento
+db:
+    image: mysql:5
+    environment:
+        - MYSQL_USER=mage
+        - MYSQL_PASSWORD=mage
+        - MYSQL_DATABASE=mage
+    volumes_from:
+        - data
+    ports:
+        - "3306:3306"
+php:
+    build: php5/
+    links:
+        - db
+    volumes_from:
+        - data
+    ports:
+        - "9000:9000"
+        - "9001:9001"
+web:
+    build: nginx/
+    links:
+        - php
+    ports:
+        - "80:80"
+    volumes_from:
+        - data
