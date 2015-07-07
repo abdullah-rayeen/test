@@ -4,7 +4,7 @@ MAINTAINER Abdullah <abdullah.rayeen@gmail.com>
 COPY . /
 # Hack for https://github.com/docker/fig/pull/517
 COPY true-asm /bin/echo
-VOLUME ["/var/lib/mysql"]
+VOLUME ["/srv/magento", "/var/lib/mysql"]
 # Executables this small
 # Thanks to tianon
 # Haiku by way of credit

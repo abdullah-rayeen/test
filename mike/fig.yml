@@ -3,20 +3,33 @@ data:
     build: data/
     volumes:
         - data/srv/magento:/srv/magento
-db:
-    image: mysql:5
+        - data/srv/mysql:/var/lib/mysql
+dbmaster:
+    image: tutum/mysql
     environment:
-        - MYSQL_USER=mage
-        - MYSQL_PASSWORD=mage
-        - MYSQL_DATABASE=mage
+        - REPLICATION_MASTER=true
+        - REPLICATION_PASS=admin
+        - MYSQL_USER=root
+    links:
+        - data
     volumes_from:
         - data
     ports:
         - "3306:3306"
+dbslave:
+    image: tutum/mysql
+    environment:
+        - REPLICATION_SLAVE=true
+    links:
+        - dbmaster
+    volumes_from:
+        - data
+    ports:
+        - "3307:3306"
 php:
     build: php5/
     links:
-        - db
+        - dbmaster
     volumes_from:
         - data
     ports:
